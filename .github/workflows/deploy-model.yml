@@ -1,0 +1,69 @@
+name: Build & Deploy Afval Detectie Model
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'model/best.pt'       # Nieuw getraind model
+      - 'serve/**'            # Wijziging in de API service
+
+env:
+  REGISTRY: p4lu1azuremodel.azurecr.io
+  IMAGE_NAME: ai-labeler
+  RESOURCE_GROUP: P4LU1
+  CONTAINER_NAME: ai-labeler
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Code + model ophalen (LFS voor grote bestanden)
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      # 2. Inloggen op Azure
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # 3. Image bouwen en pushen naar ACR
+      #    Azure bouwt de image in de cloud — geen lokale Docker nodig
+      - name: Build and push image to ACR
+        run: |
+          az acr build \
+            --registry p4lu1azuremodel \
+            --image ${{ env.IMAGE_NAME }}:latest \
+            --image ${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            --file serve/Dockerfile \
+            .
+
+      # 4. Azure Container Instance updaten met nieuwe image
+      - name: Deploy to Azure Container Instance
+        run: |
+          az container create \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --name ${{ env.CONTAINER_NAME }} \
+            --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
+            --registry-login-server ${{ env.REGISTRY }} \
+            --registry-username $(az acr credential show --name p4lu1azuremodel --query username -o tsv) \
+            --registry-password $(az acr credential show --name p4lu1azuremodel --query "passwords[0].value" -o tsv) \
+            --ports 8000 \
+            --dns-name-label p4-ai-labeler \
+            --cpu 4 \
+            --memory 8 \
+            --os-type Linux
+
+      # 5. URL tonen zodat je de appsettings kunt updaten
+      - name: Show deployed URL
+        run: |
+          echo "Container URL:"
+          az container show \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --name ${{ env.CONTAINER_NAME }} \
+            --query ipAddress.fqdn \
+            -o tsv

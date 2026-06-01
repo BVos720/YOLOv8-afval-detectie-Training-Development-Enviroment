@@ -1,0 +1,50 @@
+# ── Datasets & Afbeeldingen ────────────────────────────────────────────────
+Dataset/
+Images/
+tflite_export/
+
+# ── Model gewichten & trainingsresultaten ──────────────────────────────────
+runs/
+*.pt
+*.tflite
+*.onnx
+yolov8*.pt
+yolo26n.pt
+
+# Getraind model WEL meesturen voor CI/CD pipeline
+!model/best.pt
+
+# ── Python cache ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+
+# ── Virtual environments ───────────────────────────────────────────────────
+venv/
+.venv/
+env/
+.env
+
+# ── Visual Studio ──────────────────────────────────────────────────────────
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.slnx.docstates
+
+# ── Jupyter Notebooks checkpoints ─────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── OS bestanden ───────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs ───────────────────────────────────────────────────────────────────
+*.log
+*.csv
+
+# ── Hugging Face cache ─────────────────────────────────────────────────────
+.cache/

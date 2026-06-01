@@ -1,0 +1,51 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Train model",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}\\YOLOv8 afval detectie\\main.py",
+      "args": ["--stap", "train"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Exporteer naar Vela (automatisch best.pt zoeken)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}\\YOLOv8 afval detectie\\main.py",
+      "args": ["--stap", "export"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Exporteer naar Vela (eigen model pad)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}\\YOLOv8 afval detectie\\main.py",
+      "args": [
+        "--stap", "export",
+        "--model", "C:\\Projecten\\Periode 4\\YOLOv8 afval detectie\\runs\\yolov8n_training\\weights\\best.pt"
+      ],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Exporteer naar Vela (TFLite overslaan → direct Vela)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}\\YOLOv8 afval detectie\\main.py",
+      "args": [
+        "--stap", "export",
+        "--tflite", "C:\\Projecten\\Periode 4\\YOLOv8 afval detectie\\tflite_export\\tflite_output\\best_full_integer_quant.tflite"
+      ],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Volledige pipeline (prep + train + upload + export)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}\\YOLOv8 afval detectie\\main.py",
+      "args": ["--stap", "alles"],
+      "console": "integratedTerminal"
+    }
+  ]
+}
