@@ -292,16 +292,43 @@ def map_modus(s: dict):
         print("[!] Geen afbeeldingen gevonden.")
         return
 
+    model = get_model(actief_model_pad(s))
     print(f"[map] {len(bestanden)} afbeeldingen gevonden")
+    print("[map] Bekijk elke afbeelding — ENTER = opslaan + volgende, ESC = stoppen")
+
     for pad in bestanden:
         naam = os.path.basename(pad)
+        resultaten = model(pad, conf=s["CONF_DREMPEL"], verbose=False)
+
+        # Toon de afbeelding met bounding boxes ter controle
+        beeld = resultaten[0].plot()
+        cv2.imshow("Controle (enter = opslaan, esc = stop)", beeld)
+
+        bevestigd = False
+        while True:
+            toets = cv2.waitKey(0) & 0xFF
+            if toets in (13, 32):      # Enter of Spatie
+                bevestigd = True
+                break
+            if toets == 27:            # Esc
+                break
+
+        if not bevestigd:
+            print("[map] Gestopt.")
+            break
+
+        # Coordinaten bepalen (EXIF of handmatig) en posten
         lat, lon = lees_gps_uit_exif(pad)
         if lat is None or lon is None:
             print(f"\n[map] {naam}")
             lat, lon = vraag_coordinaten(naam)
         else:
             print(f"\n[map] {naam}  (GPS uit EXIF: {lat:.5f}, {lon:.5f})")
-        detecteer(s, pad, lat, lon)
+
+        img_bytes, ct = afbeelding_bytes(pad)
+        post_resultaat(s, resultaten[0], lat, lon, img_bytes, ct)
+
+    cv2.destroyAllWindows()
 
 
 # ── Testen ───────────────────────────────────────────────────────────────--

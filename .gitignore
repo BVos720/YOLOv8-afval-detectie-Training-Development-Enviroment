@@ -2,6 +2,8 @@
 Dataset/
 Images/
 tflite_export/
+Detect photos/
+dataset_api/
 
 # ── Model gewichten & trainingsresultaten ──────────────────────────────────
 runs/
@@ -25,6 +27,7 @@ venv/
 .venv/
 env/
 .env
+Conf.env
 
 # ── Visual Studio ──────────────────────────────────────────────────────────
 .vs/
