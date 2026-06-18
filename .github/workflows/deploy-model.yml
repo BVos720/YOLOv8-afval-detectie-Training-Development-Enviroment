@@ -1,11 +1,11 @@
 name: Build & Deploy Afval Detectie Model
 
 on:
+  workflow_dispatch:          # Handmatig starten via GitHub UI
   push:
     branches:
-      - main
+      - master
     paths:
-      - 'model/best.pt'       # Nieuw getraind model
       - 'serve/**'            # Wijziging in de API service
 
 env:

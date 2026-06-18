@@ -1,0 +1,8 @@
+{
+  "API_BASE_URL": "aiapilu4-fsbzhzbngucufaer.francecentral-01.azurewebsites.net",
+  "CAMERA_ID": "laptop-cam",
+  "MODEL_MAP": "C:\\Projecten\\Periode 4\\YOLOv8 afval detectie\\model",
+  "CONF_DREMPEL": 0.25,
+  "RUNS_MAP": "C:\\Projecten\\Periode 4\\YOLOv8 afval detectie\\runs",
+  "DATASET_MAP": "C:\\Projecten\\Periode 4\\YOLOv8 afval detectie\\dataset_api"
+}
