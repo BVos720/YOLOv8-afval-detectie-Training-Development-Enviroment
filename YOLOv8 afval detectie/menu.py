@@ -294,7 +294,11 @@ def map_modus(s: dict):
 
     model = get_model(actief_model_pad(s))
     print(f"[map] {len(bestanden)} afbeeldingen gevonden")
-    print("[map] Bekijk elke afbeelding — ENTER = opslaan + volgende, ESC = stoppen")
+    print("[map] Klik op het VENSTER en druk dan ENTER = opslaan + volgende, ESC = stoppen")
+
+    venster = "Controle (enter = opslaan, esc = stop)"
+    cv2.namedWindow(venster, cv2.WINDOW_NORMAL)
+    cv2.setWindowProperty(venster, cv2.WND_PROP_TOPMOST, 1)
 
     for pad in bestanden:
         naam = os.path.basename(pad)
@@ -302,12 +306,12 @@ def map_modus(s: dict):
 
         # Toon de afbeelding met bounding boxes ter controle
         beeld = resultaten[0].plot()
-        cv2.imshow("Controle (enter = opslaan, esc = stop)", beeld)
+        cv2.imshow(venster, beeld)
 
         bevestigd = False
         while True:
             toets = cv2.waitKey(0) & 0xFF
-            if toets in (13, 32):      # Enter of Spatie
+            if toets in (13, 10, 32):  # Enter of Spatie
                 bevestigd = True
                 break
             if toets == 27:            # Esc
